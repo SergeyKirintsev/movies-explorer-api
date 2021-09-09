@@ -8,6 +8,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
+const limiter = require('./middlewares/rate-limit');
 
 const errorsHandler = require('./middlewares/errorsHandler');
 const { NotFoundError } = require('./errors/not-found-err');
@@ -17,11 +18,13 @@ const { login, createUser } = require('./controllers/users');
 const { PORT = 3000 } = process.env;
 
 const app = express();
+// app.set('trust proxy', 1); // Enable if you're behind a reverse proxy
 
+app.use(requestLogger);
+app.use(limiter);
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
-app.use(requestLogger);
 app.use(cors);
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
@@ -58,7 +61,4 @@ app.use(errors()); // обработчик ошибок celebrate
 
 app.use(errorsHandler);
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server run on port ${PORT}...`);
-});
+app.listen(PORT);
