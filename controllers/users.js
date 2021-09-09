@@ -43,13 +43,12 @@ const createUser = (req, res, next) => {
     .then((user) => res.send({ data: user.toJSON() }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные при создании пользователя'));
+        return next(new ValidationError('Переданы некорректные данные при создании пользователя'));
       }
       if (err.name === 'MongoError' && err.code === 11000) {
-        next(new ExistFieldError('Email уже существует'));
-      } else {
-        next(err);
+        return next(new ExistFieldError('Email уже существует'));
       }
+      return next(err);
     });
 };
 
