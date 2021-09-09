@@ -1,4 +1,3 @@
-require('dotenv').config();
 const helmet = require('helmet');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -10,14 +9,9 @@ const limiter = require('./middlewares/rate-limit');
 const errorsHandler = require('./middlewares/errorsHandler');
 const router = require('./routes');
 
-const { PORT = 3000 } = process.env;
+const { MONGO_URL, MONGO_OPTIONS, PORT } = require('./utils/constants');
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+mongoose.connect(MONGO_URL, MONGO_OPTIONS);
 
 const app = express();
 // app.set('trust proxy', 1); // Enable if you're behind a reverse proxy
