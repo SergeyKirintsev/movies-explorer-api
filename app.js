@@ -9,7 +9,7 @@ const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 
-const errorsHandler = require('./errors/errorsHandler');
+const errorsHandler = require('./middlewares/errorsHandler');
 const { NotFoundError } = require('./errors/not-found-err');
 
 const { login, createUser } = require('./controllers/users');
