@@ -5,27 +5,27 @@ const { NotFoundError } = require('../errors/not-found-err');
 const { CastError } = require('../errors/cast-err');
 const { ExistFieldError } = require('../errors/exist-field-err');
 const { ValidationError } = require('../errors/validation-err');
+const {
+  SECRET_KEY,
+  COOKIE_KEY,
+  COOKIE_OPTIONS,
+} = require('../utils/constants');
 
 const signOut = (req, res) => res.clearCookie('jwt').send({ message: 'Куки удалены' });
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  const { NODE_ENV, JWT_SECRET = 'secret-key', JWT_DEV = 'dev-key' } = process.env;
 
   User.findUserByCredentials(email, password)
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : JWT_DEV,
+        SECRET_KEY,
         { expiresIn: '7d' },
       );
       res
-        .cookie('jwt', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-        })
-        .status(200)
+        .cookie(COOKIE_KEY, token, COOKIE_OPTIONS)
         .send({ data: user.toJSON() });
     })
     .catch(next);
