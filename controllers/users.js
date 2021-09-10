@@ -11,7 +11,7 @@ const {
   COOKIE_OPTIONS,
 } = require('../utils/constants');
 
-const signOut = (req, res) => res.clearCookie('jwt').send({ message: 'Куки удалены' });
+const signOut = (req, res) => res.clearCookie(COOKIE_KEY).send({ message: 'Куки удалены' });
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -52,8 +52,52 @@ const createUser = (req, res, next) => {
     });
 };
 
+const getMe = (req, res, next) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
+    .then(({ name, email }) => res.send({ data: { email, name } }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Невалидный id пользователя'));
+      }
+      return next(err);
+    });
+};
+
+// TODO Проверять email на дубли перед записью в базу
+const updateProfile = (req, res, next) => {
+  const userId = req.user._id;
+  const { name, email } = req.body;
+
+  User.findByIdAndUpdate(
+    userId,
+    { name, email },
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true, // данные будут валидированы перед изменением
+    },
+  )
+    .orFail(() => next(new NotFoundError('Пользователь по указанному _id не найден')))
+    .then((data) => res.send(data))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new CastError('Невалидный id пользователя'));
+      }
+      if (err.name === 'ValidationError') {
+        return next(new ValidationError('Переданы некорректные данные для обновления профиля'));
+      }
+      if (err.name === 'MongoError' && err.code === 11000) {
+        return next(new ExistFieldError('Email уже существует'));
+      }
+      return next(err);
+    });
+};
+
 module.exports = {
   createUser,
   login,
   signOut,
+  getMe,
+  updateProfile,
 };

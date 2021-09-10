@@ -6,7 +6,9 @@ const MONGO_OPTIONS = {
   useFindAndModify: false,
   useUnifiedTopology: true,
 };
-const COOKIE_KEY = 'jwt';
+
+const COOKIE_KEY = 'praktikum';
+
 const COOKIE_OPTIONS = {
   maxAge: 3600000 * 24 * 7,
   httpOnly: true,

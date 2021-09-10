@@ -7,14 +7,14 @@ module.exports = (req, res, next) => {
   const token = req.cookies[COOKIE_KEY];
 
   if (!token) {
-    throw new AuthError('Нет токена');
+    return next(new AuthError('Необходима авторизация!'));
   }
 
   try {
     const payload = jwt.verify(token, SECRET_KEY);
     req.user = payload; // записываем пейлоуд в объект запроса
   } catch (err) {
-    throw new AuthError('Ошибка верификации токена');
+    return next(new AuthError('Ошибка верификации токена'));
   }
 
   next(); // пропускаем запрос дальше

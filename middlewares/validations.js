@@ -19,7 +19,19 @@ const validationLogin = celebrate({
   }),
 });
 
+const validateUpdateProfile = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email()
+      .message('Невалидный email')
+      .messages({
+        'any.required': 'Поле email обязательное',
+      }),
+    name: Joi.string().required(),
+  }),
+});
+
 module.exports = {
   validateCreateUser,
   validationLogin,
+  validateUpdateProfile,
 };
