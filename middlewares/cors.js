@@ -2,11 +2,10 @@ const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [
   'http://localhost:3000',
-  'http://kirser.nomoredomains.club',
-  'https://kirser.nomoredomains.club',
+  'http://api.kirser-diploma.nomoredomains.club',
+  'https://api.kirser-diploma.nomoredomains.club',
 ];
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
@@ -23,5 +22,5 @@ module.exports = (req, res, next) => {
     return res.end();
   }
 
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };
