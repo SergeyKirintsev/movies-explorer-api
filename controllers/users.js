@@ -65,7 +65,6 @@ const getMe = (req, res, next) => {
     });
 };
 
-// TODO Проверять email на дубли перед записью в базу
 const updateProfile = (req, res, next) => {
   const userId = req.user._id;
   const { name, email } = req.body;

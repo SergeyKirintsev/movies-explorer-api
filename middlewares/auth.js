@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const { AuthError } = require('../errors/auth-err');
 const { SECRET_KEY, COOKIE_KEY } = require('../utils/constants');
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const token = req.cookies[COOKIE_KEY];
 
@@ -17,5 +16,5 @@ module.exports = (req, res, next) => {
     return next(new AuthError('Ошибка верификации токена'));
   }
 
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };
