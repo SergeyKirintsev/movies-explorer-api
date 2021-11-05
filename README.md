@@ -2,4 +2,4 @@
 
 Бэкенд https://api.kirser-diploma.nomoredomains.club
 
-ip адрес сервера `178.154.216.247`
+ip адрес сервера `62.84.123.82`
