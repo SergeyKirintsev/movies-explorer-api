@@ -2,8 +2,8 @@ const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 const allowedCors = [
   'http://localhost:3005',
-  'http://api.kirser-diploma.nomoredomains.club',
-  'https://api.kirser-diploma.nomoredomains.club',
+  'http://kirser-diploma.nomoredomains.club',
+  'https://kirser-diploma.nomoredomains.club',
 ];
 
 module.exports = (req, res, next) => {
